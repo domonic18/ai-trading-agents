@@ -1,9 +1,28 @@
 [project]
 name = "tradingagents"
 version = "0.1.0"
-description = "Add your description here"
+description = "Multi-Agents LLM Financial Trading Framework"
 readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "TradingAgents Team", email = "yijia.xiao@cs.ucla.edu" }
+]
+maintainers = [
+    { name = "Tauric Research", email = "info@tauricresearch.com" }
+]
+keywords = ["trading", "llm", "agents", "finance", "ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Financial and Trading Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
 dependencies = [
     "akshare>=1.16.98",
     "backtrader>=1.9.78.123",
@@ -12,7 +31,6 @@ dependencies = [
     "eodhd>=1.0.32",
     "feedparser>=6.0.11",
     "finnhub-python>=2.4.23",
-    "grip>=4.6.2",
     "langchain-anthropic>=0.3.15",
     "langchain-experimental>=0.3.4",
     "langchain-google-genai>=2.1.5",
@@ -26,36 +44,67 @@ dependencies = [
     "redis>=6.2.0",
     "requests>=2.32.4",
     "rich>=14.0.0",
-    "setuptools>=80.9.0",
     "stockstats>=0.6.5",
     "tqdm>=4.67.1",
     "tushare>=1.4.21",
     "typing-extensions>=4.14.0",
     "yfinance>=0.2.63",
+    # CLI dependencies
+    "typer>=0.9.0",
+    "python-dotenv>=1.0.0",
 ]
 
 [project.optional-dependencies]
+# Chinese market support (A-shares, DashScope LLM)
 chinese = [
     "pytdx",
     "dashscope",
 ]
+# Database support (MongoDB for persistent storage)
 database = [
     "pymongo>=4.0.0",
 ]
+# Visualization tools (Streamlit web app, Plotly charts)
 visualization = [
     "streamlit",
     "plotly",
 ]
+# Development tools (testing, linting, formatting)
 development = [
-    "pytest",
-    "black",
-    "flake8",
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=24.0.0",
+    "flake8>=7.0.0",
+    "mypy>=1.8.0",
 ]
+# All optional dependencies
 all = [
-    "pytdx",
-    "dashscope", 
-    "pymongo>=4.0.0",
-    "streamlit",
-    "plotly",
+    "tradingagents[chinese,database,visualization]",
 ]
+
+[project.scripts]
+tradingagents = "cli.main:app"
+
+[project.urls]
+Homepage = "https://github.com/TauricResearch/ai-trading-agents"
+Documentation = "https://github.com/TauricResearch/ai-trading-agents/blob/main/docs/README.md"
+Repository = "https://github.com/TauricResearch/ai-trading-agents"
+Issues = "https://github.com/TauricResearch/ai-trading-agents/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
 
