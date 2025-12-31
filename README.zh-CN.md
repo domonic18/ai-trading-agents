@@ -87,10 +87,10 @@ TradingAgents 是一个模拟真实交易公司动态的多智能体交易框架
 
 ### 安装
 
-克隆 TradingAgents：
+克隆仓库：
 ```bash
-git clone https://github.com/TauricResearch/TradingAgents.git
-cd TradingAgents
+git clone https://github.com/domonic18/ai-trading-agents.git
+cd ai-trading-agents
 ```
 
 #### 推荐：使用 uv（快速包管理器）
@@ -101,16 +101,25 @@ cd TradingAgents
 # 安装 uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
+# 切换到后端目录
+cd backend
+
 # 创建虚拟环境并安装依赖
 uv sync
 
 # 安装可选依赖（中国市场、数据库、可视化）
 uv sync --extra all
+
+# 返回项目根目录以使用 CLI
+cd ..
 ```
 
 #### 备选：使用 pip
 
 ```bash
+# 切换到后端目录
+cd backend
+
 # 创建虚拟环境
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -121,6 +130,9 @@ pip install -e .
 # 安装可选依赖
 pip install -e ".[all]"  # 所有可选功能
 pip install -e ".[chinese,database]"  # 特定功能
+
+# 返回项目根目录以使用 CLI
+cd ..
 ```
 
 ### 必需的 API
@@ -142,14 +154,18 @@ cp .env.example .env
 
 ### CLI 使用
 
-您可以直接运行 CLI：
+从项目根目录运行 CLI：
 
 ```bash
-# 使用 uv
-uv run python -m cli.main
+# 方法 1：直接使用虚拟环境中的 Python
+backend/.venv/bin/python -m cli.main
 
-# 或使用已安装的命令
-tradingagents
+# 方法 2：先激活虚拟环境
+source backend/.venv/bin/activate
+python -m cli.main
+
+# 方法 3：Windows 系统
+backend\\.venv\\Scripts\\python -m cli.main
 ```
 
 您将看到一个交互界面，可以选择股票代码、日期、LLM、研究深度等。

@@ -87,10 +87,10 @@ Our framework decomposes complex trading tasks into specialized roles. This ensu
 
 ### Installation
 
-Clone TradingAgents:
+Clone the repository:
 ```bash
-git clone https://github.com/TauricResearch/TradingAgents.git
-cd TradingAgents
+git clone https://github.com/domonic18/ai-trading-agents.git
+cd ai-trading-agents
 ```
 
 #### Recommended: Using uv (Fast Package Manager)
@@ -101,16 +101,25 @@ cd TradingAgents
 # Install uv
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
+# Change to backend directory
+cd backend
+
 # Create virtual environment and install dependencies
 uv sync
 
 # Install with optional dependencies (Chinese market, database, visualization)
 uv sync --extra all
+
+# Return to project root for CLI usage
+cd ..
 ```
 
 #### Alternative: Using pip
 
 ```bash
+# Change to backend directory
+cd backend
+
 # Create virtual environment
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
@@ -121,6 +130,9 @@ pip install -e .
 # Install with optional dependencies
 pip install -e ".[all]"  # All optional features
 pip install -e ".[chinese,database]"  # Specific features
+
+# Return to project root for CLI usage
+cd ..
 ```
 
 ### Required APIs
@@ -142,13 +154,18 @@ cp .env.example .env
 
 ### CLI Usage
 
-You can also try out the CLI directly by running:
-```bash
-# Using uv
-uv run python -m cli.main
+Run the CLI from the project root:
 
-# Or using installed command
-tradingagents
+```bash
+# Method 1: Using the virtual environment Python directly
+backend/.venv/bin/python -m cli.main
+
+# Method 2: Activate virtual environment first
+source backend/.venv/bin/activate
+python -m cli.main
+
+# Method 3: Windows
+backend\\.venv\\Scripts\\python -m cli.main
 ```
 You will see a screen where you can select your desired tickers, date, LLMs, research depth, etc.
 
