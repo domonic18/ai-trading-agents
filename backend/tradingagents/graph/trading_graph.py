@@ -44,11 +44,11 @@ from tradingagents.agents.utils.agent_utils import (
     get_global_news
 )
 
-from .conditional_logic import ConditionalLogic
-from .setup import GraphSetup
-from .propagation import Propagator
-from .reflection import Reflector
-from .signal_processing import SignalProcessor
+from tradingagents.graph.conditional_logic import ConditionalLogic
+from tradingagents.graph.setup import GraphSetup
+from tradingagents.graph.propagation import Propagator
+from tradingagents.graph.reflection import Reflector
+from tradingagents.graph.signal_processing import SignalProcessor
 
 
 class TradingAgentsGraph:

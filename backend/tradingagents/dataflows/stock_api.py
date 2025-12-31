@@ -84,7 +84,7 @@ def search_stocks_by_name(name: str) -> List[Dict[str, Any]]:
     """
     # 这个功能需要MongoDB支持，暂时通过原有方式实现
     try:
-        from ..examples.stock_query_examples import EnhancedStockQueryService
+        from .examples.stock_query_examples import EnhancedStockQueryService
         service = EnhancedStockQueryService()
         return service.query_stocks_by_name(name)
     except Exception as e:

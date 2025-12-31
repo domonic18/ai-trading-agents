@@ -3,6 +3,43 @@ from .reddit_utils import fetch_top_from_category
 from .yfin_utils import *
 from .stockstats_utils import *
 from .googlenews_utils import *
+from .alpha_vantage_stock import get_stock as get_alpha_vantage_stock
+from .alpha_vantage_indicator import get_indicator as get_alpha_vantage_indicator
+from .alpha_vantage_fundamentals import (
+    get_fundamentals as get_alpha_vantage_fundamentals,
+    get_balance_sheet as get_alpha_vantage_balance_sheet,
+    get_cashflow as get_alpha_vantage_cashflow,
+    get_income_statement as get_alpha_vantage_income_statement
+)
+from .alpha_vantage_news import (
+    get_news as get_alpha_vantage_news,
+    get_insider_transactions as get_alpha_vantage_insider_transactions
+)
+from .y_finance import (
+    get_YFin_data_online,
+    get_stock_stats_indicators_window,
+    get_balance_sheet as get_yfinance_balance_sheet,
+    get_cashflow as get_yfinance_cashflow,
+    get_income_statement as get_yfinance_income_statement,
+    get_insider_transactions as get_yfinance_insider_transactions,
+)
+from .local import (
+    get_YFin_data,
+    get_data_in_range,
+    get_simfin_balance_sheet,
+    get_simfin_cashflow,
+    get_simfin_income_statements,
+    get_finnhub_news,
+    get_finnhub_company_insider_sentiment,
+    get_finnhub_company_insider_transactions,
+    get_reddit_global_news,
+    get_reddit_company_news,
+)
+from .openai import (
+    get_fundamentals_openai,
+    get_stock_news_openai,
+    get_global_news_openai,
+)
 
 # Import Chinese finance utilities if available
 try:
@@ -10,7 +47,6 @@ try:
 except ImportError:
     def get_chinese_social_sentiment(*args, **kwargs):
         return "Chinese finance utilities not available"
-from .finnhub_utils import get_data_in_range
 from dateutil.relativedelta import relativedelta
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
@@ -515,7 +551,6 @@ def get_stock_stats_indicators_window(
             "Tips: Use alongside RSI or MACD to confirm signals; divergence between price and MFI can indicate potential reversals."
         ),
     }
-}
 
 VENDOR_LIST = [
     "local",
@@ -698,19 +733,6 @@ def route_to_vendor(method: str, *args, **kwargs):
         raise RuntimeError(f"All vendor implementations failed for method '{method}'")
     else:
         print(f"FINAL: Method '{method}' completed with {len(results)} result(s) from {vendor_attempt_count} vendor attempt(s)")
-
-            ind_string += f"{curr_date.strftime('%Y-%m-%d')}: {indicator_value}\n"
-
-            curr_date = curr_date - relativedelta(days=1)
-
-    result_str = (
-        f"## {indicator} values from {before.strftime('%Y-%m-%d')} to {end_date}:\n\n"
-        + ind_string
-        + "\n\n"
-        + best_ind_params.get(indicator, "No description available.")
-    )
-
-    return result_str
 
 
 def get_stockstats_indicator(

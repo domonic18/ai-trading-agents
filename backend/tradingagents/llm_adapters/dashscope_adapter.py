@@ -15,7 +15,7 @@ from langchain_core.utils.function_calling import convert_to_openai_tool
 from pydantic import Field, SecretStr
 import dashscope
 from dashscope import Generation
-from ..config.config_manager import token_tracker
+from tradingagents.config.config_manager import token_tracker
 
 
 class ChatDashScope(BaseChatModel):

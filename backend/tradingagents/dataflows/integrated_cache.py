@@ -17,7 +17,7 @@ from .cache_manager import StockDataCache
 # 导入自适应缓存系统
 try:
     from .adaptive_cache import get_cache_system
-    from ..config.database_manager import get_database_manager
+    from .config.database_manager import get_database_manager
     ADAPTIVE_CACHE_AVAILABLE = True
 except ImportError:
     ADAPTIVE_CACHE_AVAILABLE = False

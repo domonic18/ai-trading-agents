@@ -8,7 +8,7 @@ from langgraph.prebuilt import ToolNode
 from tradingagents.agents import *
 from tradingagents.agents.utils.agent_states import AgentState
 
-from .conditional_logic import ConditionalLogic
+from tradingagents.graph.conditional_logic import ConditionalLogic
 
 
 class GraphSetup:
