@@ -24,18 +24,8 @@
 > So we decided to fully open-source the framework. Looking forward to building impactful projects with you!
 
 <div align="center">
-<a href="https://www.star-history.com/#TauricResearch/TradingAgents&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date" />
-   <img alt="TradingAgents Star History" src="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date" style="width: 80%; height: auto;" />
- </picture>
-</a>
-</div>
 
-<div align="center">
-
-🚀 [TradingAgents](#tradingagents-framework) | ⚡ [Installation & CLI](#installation-and-cli) | 🎬 [Demo](https://www.youtube.com/watch?v=90gr5lwjIho) | 📦 [Package Usage](#tradingagents-package) | 🤝 [Contributing](#contributing) | 📄 [Citation](#citation)
+🚀 [Framework](#tradingagents-framework) | ⚡ [Installation & CLI](#installation-and-cli) | 🎬 [Demo](https://www.youtube.com/watch?v=90gr5lwjIho)
 
 </div>
 
@@ -49,39 +39,6 @@ TradingAgents is a multi-agent trading framework that mirrors the dynamics of re
 
 > TradingAgents framework is designed for research purposes. Trading performance may vary based on many factors, including the chosen backbone language models, model temperature, trading periods, the quality of data, and other non-deterministic factors. [It is not intended as financial, investment, or trading advice.](https://tauric.ai/disclaimer/)
 
-Our framework decomposes complex trading tasks into specialized roles. This ensures the system achieves a robust, scalable approach to market analysis and decision-making.
-
-### Analyst Team
-- Fundamentals Analyst: Evaluates company financials and performance metrics, identifying intrinsic values and potential red flags.
-- Sentiment Analyst: Analyzes social media and public sentiment using sentiment scoring algorithms to gauge short-term market mood.
-- News Analyst: Monitors global news and macroeconomic indicators, interpreting the impact of events on market conditions.
-- Technical Analyst: Utilizes technical indicators (like MACD and RSI) to detect trading patterns and forecast price movements.
-
-<p align="center">
-  <img src="docs/assets/analyst.png" width="100%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-### Researcher Team
-- Comprises both bullish and bearish researchers who critically assess the insights provided by the Analyst Team. Through structured debates, they balance potential gains against inherent risks.
-
-<p align="center">
-  <img src="docs/assets/researcher.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-### Trader Agent
-- Composes reports from the analysts and researchers to make informed trading decisions. It determines the timing and magnitude of trades based on comprehensive market insights.
-
-<p align="center">
-  <img src="docs/assets/trader.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-### Risk Management and Portfolio Manager
-- Continuously evaluates portfolio risk by assessing market volatility, liquidity, and other risk factors. The risk management team evaluates and adjusts trading strategies, providing assessment reports to the Portfolio Manager for final decision.
-- The Portfolio Manager approves/rejects the transaction proposal. If approved, the order will be sent to the simulated exchange and executed.
-
-<p align="center">
-  <img src="docs/assets/risk.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
 
 ## Installation and CLI
 
@@ -93,9 +50,7 @@ git clone https://github.com/domonic18/ai-trading-agents.git
 cd ai-trading-agents
 ```
 
-#### Recommended: Using uv (Fast Package Manager)
-
-[uv](https://github.com/astral-sh/uv) is the fastest Python package manager:
+#### Method 1: Using uv
 
 ```bash
 # Install uv
@@ -109,12 +64,9 @@ uv sync
 
 # Install with optional dependencies (Chinese market, database, visualization)
 uv sync --extra all
-
-# Return to project root for CLI usage
-cd ..
 ```
 
-#### Alternative: Using pip
+#### Method 2: Using pip
 
 ```bash
 # Change to backend directory
@@ -130,44 +82,61 @@ pip install -e .
 # Install with optional dependencies
 pip install -e ".[all]"  # All optional features
 pip install -e ".[chinese,database]"  # Specific features
-
-# Return to project root for CLI usage
-cd ..
 ```
 
-### Required APIs
+### Configuration
 
-You will need the OpenAI API for all the agents, and [Alpha Vantage API](https://www.alphavantage.co/support/#api-key) for fundamental and news data (default configuration).
+You need to create a `.env` file in the project root with your API keys (see `.env.example` for reference):
 
-```bash
-export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
-export ALPHA_VANTAGE_API_KEY=$YOUR_ALPHA_VANTAGE_API_KEY
-```
-
-Alternatively, you can create a `.env` file in the project root with your API keys (see `.env.example` for reference):
 ```bash
 cp .env.example .env
 # Edit .env with your actual API keys
 ```
 
-**Note:** We are happy to partner with Alpha Vantage to provide robust API support for TradingAgents. You can get a free AlphaVantage API [here](https://www.alphavantage.co/support/#api-key), TradingAgents-sourced requests also have increased rate limits to 60 requests per minute with no daily limits. Typically the quota is sufficient for performing complex tasks with TradingAgents thanks to Alpha Vantage's open-source support program. If you prefer to use OpenAI for these data sources instead, you can modify the data vendor settings in `backend/tradingagents/default_config.py`.
+**Minimal required configuration**:
+
+**When analyzing US stocks only**:
+```env
+# OpenAI or Google AI (choose one)
+OPENAI_API_KEY=your_openai_api_key_here
+# or
+GOOGLE_API_KEY=your_google_api_key_here
+
+# FinnHub (required for financial data)
+FINNHUB_API_KEY=your_finnhub_api_key_here
+```
+
+**When analyzing Chinese A-shares or using DashScope LLM**:
+```env
+# DashScope (required for Chinese stocks or Qwen models)
+DASHSCOPE_API_KEY=your_dashscope_api_key_here
+
+# FinnHub (required for financial data)
+FINNHUB_API_KEY=your_finnhub_api_key_here
+```
+
+**Note**:
+- **DashScope API key is only required when**:
+  - Analyzing Chinese A-share stocks (using TongDaXin data + DashScope embeddings)
+  - Choosing DashScope as your LLM provider (Qwen models)
+- **When analyzing US stocks with OpenAI/Google models**: DashScope is not required
 
 ### CLI Usage
 
 Run the CLI from the project root:
 
 ```bash
-# Method 1: Using the virtual environment Python directly
-backend/.venv/bin/python -m cli.main
-
-# Method 2: Activate virtual environment first
+# Activate virtual environment
 source backend/.venv/bin/activate
-python -m cli.main
 
-# Method 3: Windows
-backend\\.venv\\Scripts\\python -m cli.main
+# Change to backend directory
+cd backend
+
+# Start CLI
+python -m cli.main
 ```
-You will see a screen where you can select your desired tickers, date, LLMs, research depth, etc.
+
+You will see an interactive interface where you can select your desired tickers, date, LLMs, research depth, etc.
 
 <p align="center">
   <img src="docs/assets/cli/cli_init.png" width="100%" style="display: inline-block; margin: 0 2%;">
@@ -183,75 +152,35 @@ An interface will appear showing results as they load, letting you track the age
   <img src="docs/assets/cli/cli_transaction.png" width="100%" style="display: inline-block; margin: 0 2%;">
 </p>
 
-## TradingAgents Package
+## Acknowledgments
 
-### Implementation Details
+We extend our sincere gratitude to the [Tauric Research](https://github.com/TauricResearch) team for creating the revolutionary multi-agent trading framework **TradingAgents**!
 
-We built TradingAgents with LangGraph to ensure flexibility and modularity. We utilize `o1-preview` and `gpt-4o` as our deep thinking and fast thinking LLMs for our experiments. However, for testing purposes, we recommend you use `o4-mini` and `gpt-4.1-mini` to save on costs as our framework makes **lots of** API calls.
+This project is based on their groundbreaking work in multi-agent LLM financial trading systems. Their innovative approach to simulating real-world trading firm dynamics through specialized AI agents has opened new possibilities in financial research and analysis.
 
-### Python Usage
+We also acknowledge the broader open-source community whose tools and libraries make this research possible. This project is intended for educational and research purposes only.
 
-To use TradingAgents inside your code, you can import the `tradingagents` module and initialize a `TradingAgentsGraph()` object. The `.propagate()` function will return a decision. You can run `main.py`, here's also a quick example:
+## Disclaimer
 
-```python
-from backend.tradingagents.graph.trading_graph import TradingAgentsGraph
-from backend.tradingagents.default_config import DEFAULT_CONFIG
+**IMPORTANT: STOCK MARKET INVESTMENT CARRIES RISKS. PLEASE INVEST WITH CAUTION.**
 
-ta = TradingAgentsGraph(debug=True, config=DEFAULT_CONFIG.copy())
+This framework is designed strictly for research and educational purposes. The trading decisions, analysis, and recommendations generated by this system:
 
-# forward propagate
-_, decision = ta.propagate("NVDA", "2024-05-10")
-print(decision)
-```
+- **DO NOT constitute financial, investment, or trading advice**
+- **DO NOT guarantee future performance or profits**
+- **ARE based on historical data and AI models that may not predict future market conditions accurately**
 
-You can also adjust the default configuration to set your own choice of LLMs, debate rounds, etc.
+Stock market investments involve substantial risk of loss and may not be suitable for all investors. You should:
 
-```python
-from backend.tradingagents.graph.trading_graph import TradingAgentsGraph
-from backend.tradingagents.default_config import DEFAULT_CONFIG
+1. **Never invest money you cannot afford to lose**
+2. **Conduct your own research and due diligence before making any investment decisions**
+3. **Consult with qualified financial advisors before making investment choices**
+4. **Be aware that past performance does not guarantee future results**
 
-# Create a custom config
-config = DEFAULT_CONFIG.copy()
-config["deep_think_llm"] = "gpt-4.1-nano"  # Use a different model
-config["quick_think_llm"] = "gpt-4.1-nano"  # Use a different model
-config["max_debate_rounds"] = 1  # Increase debate rounds
+The developers, contributors, and the original Tauric Research team:
 
-# Configure data vendors (default uses yfinance and Alpha Vantage)
-config["data_vendors"] = {
-    "core_stock_apis": "yfinance",           # Options: yfinance, alpha_vantage, local
-    "technical_indicators": "yfinance",      # Options: yfinance, alpha_vantage, local
-    "fundamental_data": "alpha_vantage",     # Options: openai, alpha_vantage, local
-    "news_data": "alpha_vantage",            # Options: openai, alpha_vantage, google, local
-}
+- **Assume no liability for any financial losses incurred from using this system**
+- **Do not recommend using this framework for actual trading decisions**
+- **Strongly advise using this tool only as a supplementary research aid, not as a primary decision-making system**
 
-# Initialize with custom config
-ta = TradingAgentsGraph(debug=True, config=config)
-
-# forward propagate
-_, decision = ta.propagate("NVDA", "2024-05-10")
-print(decision)
-```
-
-> The default configuration uses yfinance for stock price and technical data, and Alpha Vantage for fundamental and news data. For production use or if you encounter rate limits, consider upgrading to [Alpha Vantage Premium](https://www.alphavantage.co/premium/) for more stable and reliable data access. For offline experimentation, there's a local data vendor option that uses our **Tauric TradingDB**, a curated dataset for backtesting, though this is still in development. We're currently refining this dataset and plan to release it soon alongside our upcoming projects. Stay tuned!
-
-You can view the full list of configurations in `backend/tradingagents/default_config.py`.
-
-## Contributing
-
-We welcome contributions from the community! Whether it's fixing a bug, improving documentation, or suggesting a new feature, your input helps make this project better. If you are interested in this line of research, please consider joining our open-source financial AI research community [Tauric Research](https://tauric.ai/).
-
-## Citation
-
-Please reference our work if you find *TradingAgents* provides you with some help :)
-
-```
-@misc{xiao2025tradingagentsmultiagentsllmfinancial,
-      title={TradingAgents: Multi-Agents LLM Financial Trading Framework}, 
-      author={Yijia Xiao and Edward Sun and Di Luo and Wei Wang},
-      year={2025},
-      eprint={2412.20138},
-      archivePrefix={arXiv},
-      primaryClass={q-fin.TR},
-      url={https://arxiv.org/abs/2412.20138}, 
-}
-```
+By using this software, you agree that you understand these risks and accept full responsibility for any investment decisions you make.
