@@ -148,6 +148,63 @@ python -m cli.main
   <img src="docs/assets/cli/cli_transaction.png" width="100%" style="display: inline-block; margin: 0 2%;">
 </p>
 
+## 数据库设置（可选）
+
+### 启用高性能缓存
+
+**1. 使用 Docker Compose 启动数据库服务**：
+
+推荐使用 docker-compose 快速启动 Redis 和 MongoDB：
+
+```bash
+# 启动服务（数据将持久化到 workspace 目录）
+docker-compose -f docker-compose-dev.yml up -d
+
+# 查看服务状态
+docker-compose -f docker-compose-dev.yml ps
+
+# 停止服务
+docker-compose -f docker-compose-dev.yml down
+
+# 停止服务并清除数据（谨慎使用）
+docker-compose -f docker-compose-dev.yml down -v
+```
+
+数据将自动持久化到以下目录：
+- `workspace/db_data/mongodb` - MongoDB 数据文件
+- `workspace/db_data/redis` - Redis 数据文件
+
+**2. 在 .env 中启用**：
+```env
+# 启用数据库缓存
+MONGODB_ENABLED=true
+REDIS_ENABLED=true
+
+# MongoDB配置
+MONGODB_HOST=localhost
+MONGODB_PORT=27017
+MONGODB_DATABASE=tradingagents
+
+# Redis配置
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+```
+
+**3. 重启应用程序**：
+```bash
+# 激活虚拟环境
+source backend/.venv/bin/activate
+
+# 切换到后端目录
+cd backend
+
+# 启动CLI
+python -m cli.main
+```
+
+系统现在将使用数据库缓存以提高性能。
+
 ## 感谢
 
 感谢 [Tauric Research](https://github.com/TauricResearch) 团队创造的革命性多智能体交易框架 **TradingAgents**！

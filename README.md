@@ -152,6 +152,63 @@ An interface will appear showing results as they load, letting you track the age
   <img src="docs/assets/cli/cli_transaction.png" width="100%" style="display: inline-block; margin: 0 2%;">
 </p>
 
+## Database Setup (Optional)
+
+### Enable High-Performance Caching
+
+**1. Start database services using Docker Compose**:
+
+We recommend using docker-compose to quickly start Redis and MongoDB:
+
+```bash
+# Start services (data will be persisted to workspace directory)
+docker-compose -f docker-compose-dev.yml up -d
+
+# Check service status
+docker-compose -f docker-compose-dev.yml ps
+
+# Stop services
+docker-compose -f docker-compose-dev.yml down
+
+# Stop services and remove data (use with caution)
+docker-compose -f docker-compose-dev.yml down -v
+```
+
+Data will be automatically persisted to the following directories:
+- `workspace/db_data/mongodb` - MongoDB data files
+- `workspace/db_data/redis` - Redis data files
+
+**2. Enable in .env**:
+```env
+# Enable database caching
+MONGODB_ENABLED=true
+REDIS_ENABLED=true
+
+# MongoDB configuration
+MONGODB_HOST=localhost
+MONGODB_PORT=27017
+MONGODB_DATABASE=tradingagents
+
+# Redis configuration
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+```
+
+**3. Restart the application**:
+```bash
+# Activate virtual environment
+source backend/.venv/bin/activate
+
+# Change to backend directory
+cd backend
+
+# Start CLI
+python -m cli.main
+```
+
+The system will now use database caching for improved performance.
+
 ## Acknowledgments
 
 We extend our sincere gratitude to the [Tauric Research](https://github.com/TauricResearch) team for creating the revolutionary multi-agent trading framework **TradingAgents**!

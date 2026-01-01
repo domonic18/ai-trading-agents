@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # MongoDB - 用于持久化存储
+  mongodb:
+    image: mongo:latest
+    container_name: tradingagents-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      # 数据持久化到 workspace/db_data/mongodb
+      - ./workspace/db_data/mongodb:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE:-tradingagents}
+    networks:
+      - tradingagents-network
+
+  # Redis - 用于高性能缓存
+  redis:
+    image: redis:latest
+    container_name: tradingagents-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      # 数据持久化到 workspace/db_data/redis
+      - ./workspace/db_data/redis:/data
+    command: redis-server --appendonly yes
+    networks:
+      - tradingagents-network
+
+networks:
+  tradingagents-network:
+    driver: bridge
